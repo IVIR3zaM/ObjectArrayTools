@@ -1,0 +1,29 @@
+{
+  "name": "ivir3zam/object-array-tools",
+  "type": "library",
+  "description": "A full featured array behavior Abstract class for using in php libraries",
+  "keywords": [
+    "array-access",
+    "active-array",
+    "iterator-object",
+    "observer-array"
+  ],
+  "homepage": "https://ivir3zam.github.com/",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mohammad Reza Maghoul",
+      "email": "m.reza.maghool@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "IVIR3aM\\ObjectArrayTools\\": "src",
+      "IVIR3aM\\ObjectArrayTools\\Tests\\": "tests"
+    }
+  },
+  "minimum-stability": "dev"
+}
