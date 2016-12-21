@@ -1,5 +1,6 @@
 {
   "name": "ivir3zam/object-array-tools",
+  "version": "0.9.1",
   "type": "library",
   "description": "A full featured array behavior Abstract class for using in php libraries",
   "keywords": [

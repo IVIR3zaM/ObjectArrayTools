@@ -94,7 +94,7 @@ trait ArrayAccessTrait
      */
     public function offsetUnset($offset)
     {
-        if ($this->offsetExists($offset)) {
+        if ($this->offsetExists($offset) && $this->__FilterHooks($offset, null, false)) {
             $oldData = $this->offsetGet($offset);
             $index = array_search($offset, $this->__arrayMap);
 
