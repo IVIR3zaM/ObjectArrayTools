@@ -10,7 +10,11 @@ php:
 
 script:
   - composer install --no-interaction --prefer-source
-  - phpunit --coverage-text
+  - composer require codeclimate/php-test-reporter
+  - phpunit --coverage-clover build/logs/clover.xml
+
+after_success:
+  - CODECLIMATE_REPO_TOKEN="e85e324b2d371de2f32cad439b1c3c799967517b8a49c437c5d44b7e4e3cbbd0" vendor/bin/test-reporter
 
 notifications:
   email: "m.reza.maghool@gmail.com"
