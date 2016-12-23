@@ -12,14 +12,14 @@ namespace IVIR3aM\ObjectArrayTools\Traits;
 trait ArrayAccessTrait
 {
     /**
-     * @var int hold the scalar indexes count of the map ($__arrayMap)
+     * @var int hold the scalar indexes count of the map ($baseArrayMap)
      */
-    private $__mapIndex = 0;
+    private $arrayAccessMapIndex = 0;
 
     /**
-     * @var int hold the scalar indexes count of the concrete array ($__concreteData)
+     * @var int hold the scalar indexes count of the concrete array ($baseConcreteData)
      */
-    private $__concreteIndex = 0;
+    private $arrayAccessConcreteIndex = 0;
 
     /**
      * this is necessary for ArrayAccess Interface and check the existing of element by offset
@@ -28,7 +28,7 @@ trait ArrayAccessTrait
      */
     public function offsetExists($offset)
     {
-        return is_scalar($offset) && array_key_exists($offset, $this->__concreteData);
+        return is_scalar($offset) && array_key_exists($offset, $this->baseConcreteData);
     }
 
     /**
@@ -38,9 +38,16 @@ trait ArrayAccessTrait
      */
     public function offsetGet($offset)
     {
-        if ($this->offsetExists($offset) && $this->__FilterHooks($offset, $this->__concreteData[$offset], false)) {
-            return $this->__SanitizeHooks($offset, $this->__concreteData[$offset], false);
+        if ($this->offsetExists($offset) &&
+            $this->internalFilterHooks($offset, $this->baseConcreteData[$offset], 'output')
+        ) {
+            return $this->internalSanitizeHooks($offset, $this->baseConcreteData[$offset], 'output');
         }
+    }
+
+    private function offsetIsNew($offset)
+    {
+        return is_null($offset) || !$this->offsetExists($offset);
     }
 
     /**
@@ -54,37 +61,29 @@ trait ArrayAccessTrait
         if (!is_scalar($offset) && !is_null($offset)) {
             return;
         }
-        if (is_null($offset) || !$this->offsetExists($offset)) {
-            $oldData = null;
-            $index = $this->__mapIndex++;
-            $hook = 'insert';
-        } else {
-            $oldData = $this->offsetGet($offset);
-            $index = array_search($offset, $this->__arrayMap);
-            $hook = 'update';
-        }
+
+        $oldData = $this->offsetIsNew($offset) ? null : $this->offsetGet($offset);
+        $index = $this->offsetIsNew($offset) ? $this->arrayAccessMapIndex++ : array_search($offset, $this->baseArrayMap);
+        $hook = $this->offsetIsNew($offset) ? 'insert' : 'update';
+
         if (is_null($offset)) {
-            $offset = $this->__concreteIndex;
+            $offset = $this->arrayAccessConcreteIndex;
         }
 
         //filtering the key ($offset) based on http://www.php.net/manual/en/language.types.array.php
-        if (is_numeric($offset) || is_bool($offset)) {
-            $offset = intval($offset);
-        } else {
-            $offset = (string) $offset;
-        }
+        $offset = is_numeric($offset) || is_bool($offset) ? intval($offset) : (string)$offset;
 
-        if (!$this->__FilterHooks($offset, $value, true)) {
+        if (!$this->internalFilterHooks($offset, $value, 'input')) {
             return;
         }
 
-        if (is_numeric($offset) && $offset >= $this->__concreteIndex) {
-            $this->__concreteIndex = $offset + 1;
+        if (is_numeric($offset) && $offset >= $this->arrayAccessConcreteIndex) {
+            $this->arrayAccessConcreteIndex = $offset + 1;
         }
-        $value = $this->__SanitizeHooks($offset, $value, true);
-        $this->__concreteData[$offset] = $value;
-        $this->__arrayMap[$index] = $offset;
-        $this->__ChangingHooks($offset, $value, $oldData, $hook);
+        $value = $this->internalSanitizeHooks($offset, $value, 'input');
+        $this->baseConcreteData[$offset] = $value;
+        $this->baseArrayMap[$index] = $offset;
+        $this->internalChangingHooks($offset, $value, $oldData, $hook);
     }
 
     /**
@@ -94,17 +93,17 @@ trait ArrayAccessTrait
      */
     public function offsetUnset($offset)
     {
-        if ($this->offsetExists($offset) && $this->__FilterHooks($offset, null, false)) {
+        if ($this->offsetExists($offset) && $this->internalFilterHooks($offset, null, 'remove')) {
             $oldData = $this->offsetGet($offset);
-            $index = array_search($offset, $this->__arrayMap);
+            $index = array_search($offset, $this->baseArrayMap);
 
-            unset($this->__concreteData[$index]);
-            unset($this->__arrayMap[$index]);
-            $this->__arrayMap = array_values($this->__arrayMap);
+            unset($this->baseConcreteData[$index]);
+            unset($this->baseArrayMap[$index]);
+            $this->baseArrayMap = array_values($this->baseArrayMap);
 
-            $this->__mapIndex = count($this->__arrayMap);
+            $this->arrayAccessMapIndex = count($this->baseArrayMap);
 
-            $this->__ChangingHooks($offset, null, $oldData, 'remove');
+            $this->internalChangingHooks($offset, null, $oldData, 'remove');
         }
     }
 }

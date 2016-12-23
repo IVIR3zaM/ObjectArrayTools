@@ -127,4 +127,14 @@ class BasicArrayTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Show', $this->array[4]);
         $this->assertEquals(null, $this->array['NULL']);
     }
+
+    public function testFilteringRemove()
+    {
+        $this->array['NO_REMOVE'] = 'Permanent';
+        $this->assertEquals(6, count($this->array));
+        unset($this->array['NO_REMOVE']);
+        $this->assertEquals(6, count($this->array));
+
+        $this->assertEquals('Permanent', $this->array['NO_REMOVE']);
+    }
 }

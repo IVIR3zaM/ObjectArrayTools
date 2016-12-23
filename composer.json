@@ -1,6 +1,6 @@
 {
   "name": "ivir3zam/object-array-tools",
-  "version": "0.9.1",
+  "version": "1.0",
   "type": "library",
   "description": "A full featured array behavior Abstract class for using in php libraries",
   "keywords": [
@@ -20,11 +20,19 @@
   "require": {
     "php": ">=5.4"
   },
+  "require-dev": {
+    "phpunit/phpunit": ">=3.7.38"
+  },
   "autoload": {
     "psr-4": {
       "IVIR3aM\\ObjectArrayTools\\": "src",
       "IVIR3aM\\ObjectArrayTools\\Tests\\": "tests"
     }
   },
-  "minimum-stability": "dev"
+  "minimum-stability": "dev",
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.0-dev"
+    }
+  }
 }

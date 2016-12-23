@@ -7,34 +7,41 @@ class ActiveArray extends AbstractActiveArray
 {
     public $update = array();
 
-    protected function UpdateHook($offset, $data, $oldData)
+    protected function updateHook($offset, $data, $oldData)
     {
         $this->update = array($offset, $oldData);
     }
 
-    protected function RemoveHook($offset, $oldData)
+    protected function removeHook($offset, $oldData)
     {
         $this->update = array($offset, $oldData);
     }
 
-    protected function InsertHook($offset, $data)
+    protected function insertHook($offset, $data)
     {
         $this->update = array($offset, $data);
     }
 
-    protected function SanitizeInputHook($offset, $data)
+    protected function sanitizeInputHook($offset, $data)
     {
         return ucfirst($data);
     }
 
-    protected function FilterInputHook($offset, $data)
+    protected function filterInputHook($offset, $data)
     {
         if ($data === 'FILTER') {
             return false;
         }
     }
 
-    protected function SanitizeOutputHook($offset, $data)
+    protected function filterRemoveHook($offset, $data)
+    {
+        if ($offset === 'NO_REMOVE') {
+            return false;
+        }
+    }
+
+    protected function sanitizeOutputHook($offset, $data)
     {
         if ($offset === 'UPPER') {
             $data = strtoupper($data);
@@ -42,7 +49,7 @@ class ActiveArray extends AbstractActiveArray
         return $data;
     }
 
-    protected function FilterOutputHook($offset, $data)
+    protected function filterOutputHook($offset, $data)
     {
         if ($offset === 'NULL') {
             return false;

@@ -14,7 +14,7 @@ trait IteratorTrait
     /**
      * @var int hold the current position of iteration
      */
-    private $__iterationPosition = 0;
+    private $iteratorIterationPosition = 0;
 
     /**
      * this is necessary for Iterator Interface and rewind the position of iteration
@@ -22,7 +22,7 @@ trait IteratorTrait
      */
     public function rewind()
     {
-        $this->__iterationPosition = 0;
+        $this->iteratorIterationPosition = 0;
     }
 
     /**
@@ -32,9 +32,10 @@ trait IteratorTrait
     public function current()
     {
         if ($this->valid()) {
-            $key = $this->__arrayMap[$this->__iterationPosition];
-            $value = $this->__concreteData[$key];
-            return $this->__FilterHooks($key, $value, false) ? $this->__SanitizeHooks($key, $value, false) : null;
+            $key = $this->baseArrayMap[$this->iteratorIterationPosition];
+            $value = $this->baseConcreteData[$key];
+            return $this->internalFilterHooks($key, $value, 'output') ?
+                $this->internalSanitizeHooks($key, $value, 'output') : null;
         }
     }
 
@@ -45,7 +46,7 @@ trait IteratorTrait
     public function key()
     {
         if ($this->valid()) {
-            return $this->__arrayMap[$this->__iterationPosition];
+            return $this->baseArrayMap[$this->iteratorIterationPosition];
         }
     }
 
@@ -55,7 +56,7 @@ trait IteratorTrait
      */
     public function next()
     {
-        $this->__iterationPosition++;
+        $this->iteratorIterationPosition++;
     }
 
     /**
@@ -64,6 +65,6 @@ trait IteratorTrait
      */
     public function valid()
     {
-        return isset($this->__arrayMap[$this->__iterationPosition]);
+        return isset($this->baseArrayMap[$this->iteratorIterationPosition]);
     }
 }

@@ -5,25 +5,27 @@ namespace IVIR3aM\ObjectArrayTools\Traits;
  * Class BaseTrait
  *
  * this is the base logic and an implementation for Countable interface. the logic is
- * save an untouched array in $__concreteData and then map the keys in $__arrayMap
+ * save an untouched array in $baseConcreteData and then map the keys in $baseArrayMap
  * this will help for Iterator implementation and Sorting functionality.
  * also this trait have the hooks logic for filtering and sanitizing input and output
  * (two underscores is only for preventing of conflicts)
  *
- * @example: [2 => 'Test', 'Key' => 'Value'] will results: $__concreteData = [2 => 'Test', 'Key' => 'Value'] $__arrayMap = [0 => 2, 1 => 'Key']
+ * @example: [2 => 'Test', 'Key' => 'Value'] will results:
+ * $baseConcreteData = [2 => 'Test', 'Key' => 'Value']
+ * $baseArrayMap = [0 => 2, 1 => 'Key']
  * @package IVIR3aM\ObjectArrayTools\Traits
  */
 trait BaseTrait
 {
     /**
-     * @var array $__concreteData holding concrete array
+     * @var array $baseConcreteData holding concrete array
      */
-    private $__concreteData = array();
+    private $baseConcreteData = array();
 
     /**
-     * @var array $__arrayMap hold scalar indexes pairs for concrete indexes and also for sorting purposes
+     * @var array $baseArrayMap hold scalar indexes pairs for concrete indexes and also for sorting purposes
      */
-    private $__arrayMap = array();
+    private $baseArrayMap = array();
 
     /**
      * this is necessary for Countable Interface
@@ -31,7 +33,7 @@ trait BaseTrait
      */
     public function count()
     {
-        return count($this->__arrayMap);
+        return count($this->baseArrayMap);
     }
 
     /**
@@ -39,12 +41,12 @@ trait BaseTrait
      * both of key and value and then return the sanitized value
      * @param mixed $key the key of the element
      * @param mixed $value the value of the element
-     * @param bool $isInput are we sanitizing the input? default is no
+     * @param string $type which input or output are we sanitizing
      * @return mixed sanitized or untouched $value of the element
      */
-    private function __SanitizeHooks($key, $value, $isInput = false)
+    private function internalSanitizeHooks($key, $value, $type = 'input')
     {
-        $hook = $isInput ? 'SanitizeInputHook' : 'SanitizeOutputHook';
+        $hook = trim(strtolower($type)) == 'input' ? 'sanitizeInputHook' : 'sanitizeOutputHook';
         return method_exists($this, $hook) ? $this->$hook($key,
             $value) : $value;
     }
@@ -54,13 +56,25 @@ trait BaseTrait
      * both of key and value
      * @param mixed $key the key of the element
      * @param mixed $value the value of the element
-     * @param bool $isInput are we filtering the input? default is yes
+     * @param string $type which input or output are we sanitizing
      * @return bool is current element valid for input or output
      */
-    private function __FilterHooks($key, $value, $isInput = true)
+    private function internalFilterHooks($key, $value, $type = 'input')
     {
-        $hook = $isInput ? 'FilterInputHook' : 'FilterOutputHook';
-        if (method_exists($this, $hook)) {
+        $hook = '';
+        switch (trim(strtolower($type)))
+        {
+            case 'output':
+                $hook = 'filterOutputHook';
+                break;
+            case 'remove':
+                $hook = 'filterRemoveHook';
+                break;
+            case 'input':
+                $hook = 'filterInputHook';
+                break;
+        }
+        if ($hook && method_exists($this, $hook)) {
             $result = $this->$hook($key, $value);
             if ($result !== true && $result !== null) {
                 return false;
@@ -79,28 +93,27 @@ trait BaseTrait
      * @param string $type the type of changing (insert|update|remove)
      * @return void
      */
-    private function __ChangingHooks($key, $value, $oldValue = null, $type = 'insert')
+    private function internalChangingHooks($key, $value, $oldValue = null, $type = 'insert')
     {
         switch (trim(strtolower($type))) {
             case 'update':
-                $hook = 'UpdateHook';
+                $hook = 'updateHook';
                 if (method_exists($this, $hook)) {
                     $this->$hook($key, $value, $oldValue);
                 }
                 break;
             case 'remove':
-                $hook = 'RemoveHook';
+                $hook = 'removeHook';
                 if (method_exists($this, $hook)) {
                     $this->$hook($key, $value);
                 }
                 break;
             case 'insert':
-                $hook = 'InsertHook';
+                $hook = 'insertHook';
                 if (method_exists($this, $hook)) {
                     $this->$hook($key, $value);
                 }
                 break;
         }
-
     }
 }

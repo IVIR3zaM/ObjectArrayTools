@@ -82,30 +82,30 @@ use IVIR3aM\ObjectArrayTools\AbstractActiveArray;
 
 class DatabaseRecord extends AbstractActiveArray
 {
-    protected function SanitizeInputHook($offset, $data)
+    protected function sanitizeInputHook($offset, $data)
     {
         // some strong operation of sanitizing $data needed, this is only a sample
         return mysqli_real_escape_string($link, $data);
     }
 
-    protected function SanitizeOutputHook($offset, $data)
+    protected function sanitizeOutputHook($offset, $data)
     {
         return htmlspecialchars($data);
     }
 
-    protected function UpdateHook($offset, $data, $oldData)
+    protected function updateHook($offset, $data, $oldData)
     {
         // some strong operation of updating database process needed, this is only a sample
         mysqli_query($link, "UPDATE SomeTable SET `Data` = '{$data}' WHERE `ID` = " . intval($offset));
     }
 
-    protected function RemoveHook($offset, $oldData)
+    protected function removeHook($offset, $oldData)
     {
         // some strong operation of updating database process needed, this is only a sample
         mysqli_query($link, "DELETE FROM SomeTable WHERE `ID` = " . intval($offset));
     }
 
-    protected function InsertHook($offset, $data)
+    protected function insertHook($offset, $data)
     {
         mysqli_query($link, "INSERT INTO SomeTable SET `ID` = " . intval($offset) . ", `Data` = '{$data}'");
     }
