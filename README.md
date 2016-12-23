@@ -1,6 +1,6 @@
 # ObjectArrayTools
 
-[![Build Status](https://travis-ci.org/IVIR3zaM/ObjectArrayTools.svg?branch=master)](https://travis-ci.org/IVIR3zaM/ObjectArrayTools) [![Code Climate](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools/badges/gpa.svg)](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools)
+[![Build Status](https://travis-ci.org/IVIR3zaM/ObjectArrayTools.svg?branch=master)](https://travis-ci.org/IVIR3zaM/ObjectArrayTools) [![Code Climate](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools/badges/gpa.svg)](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools) [![Issue Count](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools/badges/issue_count.svg)](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools) [![Test Coverage](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools/badges/coverage.svg)](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools/coverage) 
 
 **Note:** this library is not complete yet, it have basic array usages but it don't support sorting functionality and serialization
 
