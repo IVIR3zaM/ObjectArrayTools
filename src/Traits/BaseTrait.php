@@ -104,7 +104,7 @@ trait BaseTrait
             case 'remove':
                 $hook = 'removeHook';
                 if (method_exists($this, $hook)) {
-                    $this->$hook($key, $value);
+                    $this->$hook($key, $oldValue);
                 }
                 break;
             case 'insert':
