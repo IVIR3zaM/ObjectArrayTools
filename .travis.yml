@@ -10,6 +10,7 @@ php:
 
 script:
   - composer install --no-interaction --prefer-source
+  - composer validate
   - composer require codeclimate/php-test-reporter
   - phpunit --coverage-clover build/logs/clover.xml
 
