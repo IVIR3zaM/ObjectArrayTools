@@ -118,7 +118,7 @@ echo $db[1];
 ```
 
 ### Sorting an array
-you can see sorting functionality of this library here. there is a complete list of supported functions in IVIR3aM\ObjectArrayTools\AbstractActiveArray class documentation
+you can see sorting functionality of this library here. there is a complete list of supported functions in [AbstractActiveArray](https://github.com/IVIR3zaM/ObjectArrayTools/blob/master/src/AbstractActiveArray.php) class documentation
 
 ```php
 use IVIR3aM\ObjectArrayTools\AbstractActiveArray;
