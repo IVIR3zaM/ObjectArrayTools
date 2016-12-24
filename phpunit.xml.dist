@@ -10,8 +10,11 @@
          stopOnFailure="false"
          bootstrap="./tests/bootstrap.php">
     <testsuites>
-        <testsuite>
-            <directory>tests</directory>
+        <testsuite name="Basic">
+            <file>tests/BasicArrayTest.php</file>
+        </testsuite>
+        <testsuite name="Sortable">
+            <file>tests/SortableArrayTest.php</file>
         </testsuite>
     </testsuites>
     <filter>

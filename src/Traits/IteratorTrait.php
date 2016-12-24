@@ -4,7 +4,7 @@ namespace IVIR3aM\ObjectArrayTools\Traits;
 /**
  * Class IteratorTrait
  *
- * this trait implements the Iterator interface and help for iterate over
+ * this trait implements the Iterator SeekableIterator and help for iterate over
  * the object in foreach loops
  *
  * @package IVIR3aM\ObjectArrayTools\Traits
@@ -17,12 +17,35 @@ trait IteratorTrait
     private $iteratorIterationPosition = 0;
 
     /**
+     * this function return the filtered and sanitized internal array
+     * @return array the filtered and sanitized internal array
+     */
+    public function getData()
+    {
+        $list = [];
+        foreach ($this as $index => $value) {
+            $list[$index] = $value;
+        }
+        return $list;
+    }
+
+    /**
      * this is necessary for Iterator Interface and rewind the position of iteration
      * @return void
      */
     public function rewind()
     {
         $this->iteratorIterationPosition = 0;
+    }
+
+    /**
+     * this is necessary for SeekableIterator Interface and move
+     * the position of the cursor
+     * @param int $position
+     */
+    public function seek($position)
+    {
+        $this->iteratorIterationPosition = intval($position);
     }
 
     /**

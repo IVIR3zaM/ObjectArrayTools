@@ -2,7 +2,7 @@
 namespace IVIR3aM\ObjectArrayTools\Tests;
 
 /**
- * Class FullArrayTest
+ * Class BasicArrayTest
  * @package IVIR3aM\ObjectArrayTools\Tests
  */
 class BasicArrayTest extends \PHPUnit_Framework_TestCase
@@ -136,5 +136,41 @@ class BasicArrayTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(6, count($this->array));
 
         $this->assertEquals('Permanent', $this->array['NO_REMOVE']);
+    }
+
+    public function testSeekable()
+    {
+        $this->array->seek(0);
+        $this->assertEquals('Hello', $this->array->current());
+        $this->array->seek(1);
+        $this->assertEquals('World', $this->array->current());
+        $this->array->seek(2);
+        $this->assertEquals('How', $this->array->current());
+        $this->array->seek(3);
+        $this->assertEquals('Are', $this->array->current());
+        $this->array->seek(4);
+        $this->assertEquals('You', $this->array->current());
+        $this->array->seek(5);
+        $this->assertEquals(null, $this->array->current());
+    }
+
+    public function testSerializable()
+    {
+        $expected = 'a:5:{i:0;s:5:"Hello";i:1;s:5:"World";s:3:"New";s:3:"How";i:2;s:3:"Are";i:3;s:3:"You";}';
+        $serialized = $this->array->serialize();
+        $this->assertEquals($expected, $serialized);
+
+        $array = new ActiveArray();
+        $array->unserialize($serialized);
+        $this->array->rewind();
+        $this->assertEquals($this->array, $array);
+
+        $expected = 'C:42:"IVIR3aM\ObjectArrayTools\Tests\ActiveArray":86:{a:5:{i:0;s:5:"Hello";i:1;s:5:"World";s:3:"New";s:3:"How";i:2;s:3:"Are";i:3;s:3:"You";}}';
+        $serialized = serialize($this->array);
+        $this->assertEquals($expected, $serialized);
+
+        $array = unserialize($serialized);
+        $this->array->rewind();
+        $this->assertEquals($this->array, $array);
     }
 }

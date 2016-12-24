@@ -1,13 +1,11 @@
 # ObjectArrayTools
 
-[![Build Status](https://travis-ci.org/IVIR3zaM/ObjectArrayTools.svg?branch=master)](https://travis-ci.org/IVIR3zaM/ObjectArrayTools) [![Code Climate](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools/badges/gpa.svg)](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools) [![Issue Count](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools/badges/issue_count.svg)](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools) [![Test Coverage](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools/badges/coverage.svg)](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools/coverage) 
-
-**Note:** this library is not complete yet, it have basic array usages but it don't support sorting functionality and serialization
+[![Build Status](https://travis-ci.org/IVIR3zaM/ObjectArrayTools.svg?branch=master)](https://travis-ci.org/IVIR3zaM/ObjectArrayTools) [![Code Climate](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools/badges/gpa.svg)](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools) [![Issue Count](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools/badges/issue_count.svg)](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools) [![Test Coverage](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools/badges/coverage.svg)](https://codeclimate.com/github/IVIR3zaM/ObjectArrayTools/coverage)
 
 this library helps you to have an object as an active array with hooks for updating, inserting, deleting, sanitizing and filtering elements.
 
 ## Technical Details
-this library is different from builtin ArrayIterator class in PHP, and this deference is that this library is based on traits so you can use it in your classes that already extending some other classes and other differences is about hooks that help you to implement Observer Pattern for your ObjectArray
+this library is different from builtin [ArrayObject](http://php.net/manual/en/class.arrayobject.php) class in PHP, and this deference is that this library is based on traits so you can use it in your classes that already extending some other classes and other differences is about hooks that help you to implement Observer Pattern for your ObjectArray, and also you have many methods equivalents to php native [Array Functions](http://php.net/manual/en/ref.array.php)
 
 ## Installation
 
@@ -117,4 +115,37 @@ $db[1] = "Lorem Ipsum <some>script</some>'; DELETE FROM SomeTable";
 
 echo $db[1];
 // Lorem Ipsum &lt;some&gt;script&lt;/some&gt;'; DELETE FROM SomeTable
+```
+
+### Sorting an array
+you can see sorting functionality of this library here. there is a complete list of supported functions in IVIR3aM\ObjectArrayTools\AbstractActiveArray class documentation
+
+```php
+use IVIR3aM\ObjectArrayTools\AbstractActiveArray;
+
+class ActiveArray extends AbstractActiveArray {}
+
+$object = new ActiveArray(['How', 'Are', 'You']);
+
+print_r($object->getData());
+/*
+Array
+(
+    [0] => How
+    [1] => Are
+    [2] => You
+)
+*/
+
+$object->sort();
+
+print_r($object->getData());
+/*
+Array
+(
+    [0] => Are
+    [1] => How
+    [2] => You
+)
+*/
 ```

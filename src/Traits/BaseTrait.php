@@ -62,8 +62,7 @@ trait BaseTrait
     private function internalFilterHooks($key, $value, $type = 'input')
     {
         $hook = '';
-        switch (trim(strtolower($type)))
-        {
+        switch (trim(strtolower($type))) {
             case 'output':
                 $hook = 'filterOutputHook';
                 break;

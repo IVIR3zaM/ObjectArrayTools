@@ -62,9 +62,10 @@ trait ArrayAccessTrait
             return;
         }
 
-        $oldData = $this->offsetIsNew($offset) ? null : $this->offsetGet($offset);
-        $index = $this->offsetIsNew($offset) ? $this->arrayAccessMapIndex++ : array_search($offset, $this->baseArrayMap);
-        $hook = $this->offsetIsNew($offset) ? 'insert' : 'update';
+        $isNew = $this->offsetIsNew($offset);
+        $oldData = $isNew ? null : $this->offsetGet($offset);
+        $index = $isNew ? $this->arrayAccessMapIndex++ : array_search($offset, $this->baseArrayMap);
+        $hook = $isNew ? 'insert' : 'update';
 
         if (is_null($offset)) {
             $offset = $this->arrayAccessConcreteIndex;
@@ -95,10 +96,11 @@ trait ArrayAccessTrait
     {
         if ($this->offsetExists($offset) && $this->internalFilterHooks($offset, null, 'remove')) {
             $oldData = $this->offsetGet($offset);
-            $index = array_search($offset, $this->baseArrayMap);
 
-            unset($this->baseConcreteData[$index]);
-            unset($this->baseArrayMap[$index]);
+            unset($this->baseConcreteData[$offset]);
+            if (($index = array_search($offset, $this->baseArrayMap, true)) !== false) {
+                unset($this->baseArrayMap[$index]);
+            }
             $this->baseArrayMap = array_values($this->baseArrayMap);
 
             $this->arrayAccessMapIndex = count($this->baseArrayMap);
