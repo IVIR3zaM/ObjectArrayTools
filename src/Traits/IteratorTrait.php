@@ -17,19 +17,6 @@ trait IteratorTrait
     private $iteratorIterationPosition = 0;
 
     /**
-     * this function return the filtered and sanitized internal array
-     * @return array the filtered and sanitized internal array
-     */
-    public function getData()
-    {
-        $list = [];
-        foreach ($this as $index => $value) {
-            $list[$index] = $value;
-        }
-        return $list;
-    }
-
-    /**
      * this is necessary for Iterator Interface and rewind the position of iteration
      * @return void
      */

@@ -89,6 +89,19 @@ trait SortableTrait
     ];
 
     /**
+     * this function return the filtered and sanitized internal array
+     * @return array the filtered and sanitized internal array
+     */
+    public function sortableConcreteData()
+    {
+        $list = [];
+        foreach ($this as $index => $value) {
+            $list[$index] = $value;
+        }
+        return $list;
+    }
+
+    /**
      * this function remap current data array with a new one
      * @param array $list the new data array for current object
      * @return void
@@ -129,7 +142,7 @@ trait SortableTrait
      */
     private function sortableCallByReference($function, $arguments)
     {
-        $list = $this->getData();
+        $list = $this->sortableConcreteData();
         $params = array_merge([&$list], $arguments);
         $result = call_user_func_array($function, $params);
         if ($result) {
@@ -155,7 +168,7 @@ trait SortableTrait
      */
     private function sortableCallByValue($function, $arguments)
     {
-        $params = array_merge([$this->getData()], $arguments);
+        $params = array_merge([$this->sortableConcreteData()], $arguments);
         return call_user_func_array($function, $params);
     }
 
@@ -178,7 +191,7 @@ trait SortableTrait
     {
         $params = array_merge(
             array_slice($arguments, 0, 1),
-            [$this->getData()],
+            [$this->sortableConcreteData()],
             array_values(array_slice($arguments, 1))
         );
         return call_user_func_array($function, $params);
